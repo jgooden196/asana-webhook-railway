@@ -2,13 +2,16 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route("/webhook", methods=["POST"])
+@app.route("/webhook", methods=["POST", "GET"])
 def webhook():
+    if request.method == "GET":
+        return jsonify({"message": "Webhook listener is running"}), 200
+
     # Check if Asana is verifying the webhook
     if "X-Hook-Secret" in request.headers:
         hook_secret = request.headers["X-Hook-Secret"]
         response = jsonify({"success": True})
-        response.headers["X-Hook-Secret"] = hook_secret  # MUST return this for handshake
+        response.headers["X-Hook-Secret"] = hook_secret  # Required for Asana handshake
         return response, 200  # Must return 200 OK
 
     # Process incoming Asana webhook events
