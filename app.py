@@ -7,17 +7,20 @@ def webhook():
     if request.method == "GET":
         return jsonify({"message": "Webhook listener is running"}), 200
 
-    # Check if Asana is verifying the webhook
+    # Log the request for debugging
+    print("Received Webhook Headers:", request.headers)
+    print("Received Webhook Body:", request.json)
+
+    # Handle Asana handshake verification
     if "X-Hook-Secret" in request.headers:
         hook_secret = request.headers["X-Hook-Secret"]
         response = jsonify({"success": True})
-        response.headers["X-Hook-Secret"] = hook_secret  # Required for Asana handshake
-        return response, 200  # Must return 200 OK
+        response.headers["X-Hook-Secret"] = hook_secret
+        return response, 200
 
     # Process incoming Asana webhook events
     data = request.json
-    print("Received Webhook:", data)  # Debugging log
-    return jsonify({"status": "received"}), 200
+    return jsonify({"status": "received", "data": data}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
