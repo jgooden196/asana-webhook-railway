@@ -8,8 +8,8 @@ def webhook():
         return jsonify({"message": "Webhook listener is running"}), 200
 
     # Log the request for debugging
-    print("Received Webhook Headers:", request.headers)
-    print("Received Webhook Body:", request.json)
+    print("✅ Received Webhook Headers:", request.headers)
+    print("✅ Received Webhook Body:", request.json)
 
     # Handle Asana handshake verification
     if "X-Hook-Secret" in request.headers:
@@ -20,6 +20,9 @@ def webhook():
 
     # Process incoming Asana webhook events
     data = request.json
+    if "events" in data:
+        print("📌 Webhook Event Data:", data["events"])  # Print actual event data
+    
     return jsonify({"status": "received", "data": data}), 200
 
 if __name__ == "__main__":
