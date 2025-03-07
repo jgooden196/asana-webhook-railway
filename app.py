@@ -1,3 +1,4 @@
+@@ -1,26 +1,29 @@
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -8,6 +9,8 @@ def webhook():
         return jsonify({"message": "Webhook listener is running"}), 200
 
     # Log the request for debugging
+    print("Received Webhook Headers:", request.headers)
+    print("Received Webhook Body:", request.json)
     print("✅ Received Webhook Headers:", request.headers)
     print("✅ Received Webhook Body:", request.json)
 
